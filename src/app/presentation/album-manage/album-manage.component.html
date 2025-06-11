@@ -1,0 +1,30 @@
+<h3>Album Manage</h3>
+<p class="current-mode">Current Mode : {{mode}}</p>
+@if (mode != "view") {
+    <p style="text-align:center;">Current id : {{id}}</p>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Album</th>
+            <th>Description</th>
+            <th>Song</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let album of allAlbums">
+            <td>{{album.id}}</td>
+            <td>{{album.name}}</td>
+            <td>{{album.description}}</td>
+            <td>
+                <ng-container *ngIf="album.songs?.length; else noSong">
+                    <span *ngFor="let song of album.songs; let last = last">
+                        {{song.name}}{{!last ? ', ' : ''}}
+                    </span>
+                </ng-container>
+                <ng-template #noSong>-</ng-template>
+            </td>
+        </tr>
+    </tbody>
+</table>
