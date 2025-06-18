@@ -1,30 +1,55 @@
 <h3>Album Manage</h3>
 <p class="current-mode">Current Mode : {{mode}}</p>
-@if (mode != "view") {
+<div *ngIf="mode != 'view'">
     <p style="text-align:center;">Current id : {{id}}</p>
-}
+</div>
 <table class="table">
     <thead>
         <tr>
             <th>ID</th>
-            <th>Album</th>
+            <th>Album Name</th>
             <th>Description</th>
+            <th>Cover</th>
             <th>Song</th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let album of allAlbums">
-            <td>{{album.id}}</td>
-            <td>{{album.name}}</td>
-            <td>{{album.description}}</td>
-            <td>
-                <ng-container *ngIf="album.songs?.length; else noSong">
-                    <span *ngFor="let song of album.songs; let last = last">
-                        {{song.name}}{{!last ? ', ' : ''}}
-                    </span>
-                </ng-container>
-                <ng-template #noSong>-</ng-template>
-            </td>
-        </tr>
+    <tr *ngFor="let album of allAlbums; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{album.name}}</td>
+        <td>{{album.description}}</td>
+        <td>
+          <img
+            *ngIf="album.file?.filePath; else noCover"
+            [src]="getImageUrl(album.file?.filePath)"
+            alt="cover"
+            style="max-width:150px;max-height:200px;z-index:1;border:1px solid #eee;"
+          />
+          <ng-template #noCover>-</ng-template>
+        </td>
+        <td>
+          <ng-container *ngIf="getActiveSongs(album.songs)?.length; else noSong">
+            <div *ngFor="let song of getActiveSongs(album.songs)">
+              {{song.name}}
+            </div>
+          </ng-container>
+          <ng-template #noSong>-</ng-template>
+        </td>
+        <td>
+          <a
+            class="btn btn-sm btn-warning"
+            [routerLink]="['/edit-album', album.id]"
+            role="button"
+          >
+            Edit
+          </a>
+          <button
+            class="btn btn-sm btn-danger ms-2"
+            (click)="confirmDelete(album.id)">
+            Delete
+          </button>
+        </td>
+    </tr>
     </tbody>
 </table>

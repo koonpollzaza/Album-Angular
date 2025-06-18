@@ -16,4 +16,7 @@ export class AppComponent {
   goToAlbum() {
     this.router.navigate(['/album_manage']);
   }
+  goToCreateAlbum() {
+    this.router.navigate(['/create-album']);
+  }
 }

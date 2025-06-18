@@ -1,3 +1,4 @@
+import { Injectable } from '@angular/core';     
 export default class Album {
     id = 0;
     name = "";
@@ -9,7 +10,7 @@ export default class Album {
     updateDate?: Date;
     isDelete?: boolean;
     songs: any[] = [];
-    file?: { // เพิ่ม property นี้
+    file?: {
         id: number;
         fileName: string;
         filePath: string;
@@ -19,4 +20,10 @@ export default class Album {
         updateDate?: Date;
         isDelete?: boolean;
     };
+
+    get songNames(): string {
+        return this.songs && this.songs.length
+            ? this.songs.map(song => song.name).join(', ')
+            : '-';
+    }
 }

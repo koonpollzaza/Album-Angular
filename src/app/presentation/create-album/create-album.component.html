@@ -1,0 +1,35 @@
+<h2 class="text-center text-primary mb-4">Create Album</h2>
+<form #albumForm="ngForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data" class="card p-4 shadow-sm mx-auto" style="max-width: 480px;">
+  <div class="mb-3">
+    <label for="name" class="form-label">Album Name:</label>
+    <input id="name" name="name" [(ngModel)]="album.name" required placeholder="Album Name" class="form-control" />
+  </div>
+  <div class="mb-3">
+    <label for="description" class="form-label">Description:</label>
+    <textarea id="description" name="description" [(ngModel)]="album.description" placeholder="Album Description" class="form-control"></textarea>
+  </div>
+  <div class="mb-3">
+    <label for="file" class="form-label">Album Image:</label>
+    <input id="file" name="file" type="file" (change)="onFileSelected($event)" accept="image/*" required class="form-control" />
+    <div class="text-center mt-2">
+      <img *ngIf="imageUrl" [src]="imageUrl" alt="Preview" class="img-thumbnail" style="max-width:120px;max-height:120px;" />
+      <span *ngIf="!imageUrl" class="text-muted">No image</span>
+    </div>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Songs:</label>
+    <div class="input-group mb-2">
+      <input type="text" [(ngModel)]="newSong" name="newSong" placeholder="Song Name" class="form-control" />
+      <button type="button" (click)="addSong()" [disabled]="!newSong.trim()" class="btn btn-primary">Add Song</button>
+    </div>
+    <ul class="list-group">
+      <li *ngFor="let song of songs; let i = index" class="list-group-item d-flex justify-content-between align-items-center py-2">
+        <span>{{ song }}</span>
+        <button type="button" (click)="removeSong(i)" class="btn btn-sm btn-danger" title="Remove">&times;</button>
+      </li>
+    </ul>
+  </div>
+  <button type="submit" [disabled]="albumForm.invalid || songs.length === 0" class="btn btn-success w-100 mt-3">
+    Create Album
+  </button>
+</form>

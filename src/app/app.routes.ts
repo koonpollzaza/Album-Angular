@@ -1,12 +1,11 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './presentation/home/home.component';
 import { AlbumManageComponent } from './presentation/album-manage/album-manage.component';
-import { DynamicRoutePageComponent } from './presentation/dynamic-route-page/dynamic-route-page.component';
+import { CreateAlbumComponent } from './presentation/create-album/create-album.component';
+import { EditAlbumComponent } from './presentation/edit-album/edit-album.component';
 
 export const routes: Routes = [
-    {path: 'home',component: HomeComponent},
-    {path: 'dynamic_route/:route',component: DynamicRoutePageComponent},
-    
-    {path: 'album_manage',component: AlbumManageComponent},
-    {path: 'album_manage/:id',component: AlbumManageComponent}
+  { path: 'album_manage', component: AlbumManageComponent },
+  { path: 'create-album', component: CreateAlbumComponent },
+  { path: '', redirectTo: '/album_manage', pathMatch: 'full' },
+  { path: 'edit-album/:id', component: EditAlbumComponent },
 ];

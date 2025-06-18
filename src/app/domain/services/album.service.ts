@@ -7,39 +7,40 @@ import Album from '../../models/album.model';
   providedIn: 'root'
 })
 export class AlbumService {
-  readonly baseURL = 'https://localhost:7058/Album/GetAll_Album'; // เปลี่ยน URL ให้ตรงกับ API จริง
+  readonly baseURL = 'https://localhost:7058/Album'; // ใช้ path หลัก
 
   constructor(private http: HttpClient) {}
 
   getAll(): Observable<Album[]> {
-    return this.http.get<Album[]>(this.baseURL).pipe(catchError(this.errorHandler));
+    return this.http.get<Album[]>(`${this.baseURL}/GetAll_Album`).pipe(catchError(this.errorHandler));
   }
 
   get(id: number | string): Observable<Album> {
     return this.http.get<Album>(`${this.baseURL}/${id}`).pipe(catchError(this.errorHandler));
   }
 
-  create(album: Album): Observable<Album> {
-    return this.http.post<Album>(this.baseURL, album).pipe(catchError(this.errorHandler));
-  }
+  create(formData: FormData): Observable<any> {
+  return this.http.post<any>(`${this.baseURL}/Create`, formData)
+    .pipe(catchError(this.errorHandler));
+}
 
-  update(id: number | string, album: Album): Observable<Album> {
-    return this.http.put<Album>(`${this.baseURL}/${id}`, album).pipe(catchError(this.errorHandler));
-  }
+ update(formData: FormData): Observable<any> {
+  return this.http.put<any>(`${this.baseURL}`, formData);
+}
 
   delete(id: number | string): Observable<any> {
     return this.http.delete(`${this.baseURL}/${id}`).pipe(catchError(this.errorHandler));
   }
 
- private errorHandler(error: any) {
-  let errorMessage = '';
-  if (error?.error?.message) {
-    errorMessage = error.error.message;
-  } else if (error?.message) {
-    errorMessage = error.message;
-  } else {
-    errorMessage = `Error Code: ${error.status}\nMessage: ${error.statusText}`;
+  private errorHandler(error: any) {
+    let errorMessage = '';
+    if (error?.error?.message) {
+      errorMessage = error.error.message;
+    } else if (error?.message) {
+      errorMessage = error.message;
+    } else {
+      errorMessage = `Error Code: ${error.status}\nMessage: ${error.statusText}`;
+    }
+    return throwError(() => errorMessage);
   }
-  return throwError(() => errorMessage);
-}
 }
