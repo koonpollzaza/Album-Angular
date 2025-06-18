@@ -25,7 +25,7 @@ export class AlbumService {
 }
 
  update(formData: FormData): Observable<any> {
-  return this.http.put<any>(`${this.baseURL}`, formData);
+  return this.http.put<any>(`${this.baseURL}/Update`, formData);
 }
 
   delete(id: number | string): Observable<any> {
