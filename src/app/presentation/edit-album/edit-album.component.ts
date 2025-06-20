@@ -32,6 +32,7 @@ export class EditAlbumComponent implements OnInit {
   selectedFile: File | null = null;
   imageUrl: string | null = null;
   loading = true;
+  showJson = false;
 
   constructor(
     private route: ActivatedRoute,

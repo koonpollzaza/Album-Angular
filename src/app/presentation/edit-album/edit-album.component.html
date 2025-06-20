@@ -1,59 +1,84 @@
 <h2 class="text-center text-warning mb-4">Edit Album</h2>
-<form #albumForm="ngForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data" class="card p-4 shadow-sm mx-auto" style="max-width: 480px;" *ngIf="!loading">
+<form #albumForm="ngForm" (ngSubmit)="onSubmit()" 
+        enctype="multipart/form-data" class="card p-4 shadow-sm mx-auto" style="max-width: 480px;" *ngIf="!loading">
+
   <div class="mb-3">
     <label for="name" class="form-label">Album Name:</label>
     <input id="name" name="name" [(ngModel)]="album.name" required placeholder="Album Name" class="form-control" />
   </div>
+
   <div class="mb-3">
     <label for="description" class="form-label">Description:</label>
     <textarea id="description" name="description" [(ngModel)]="album.description" placeholder="Album Description" class="form-control"></textarea>
   </div>
+
   <div class="mb-3">
     <label for="file" class="form-label">Album Image:</label>
     <input id="file" name="file" type="file" (change)="onFileSelected($event)" accept="image/*" class="form-control" />
     <div class="text-center mt-2">
-      <img *ngIf="imageUrl" [src]="imageUrl" alt="Preview" class="img-thumbnail" style="max-width:120px;max-height:120px;" />
+      <img *ngIf="imageUrl" [src]="imageUrl" alt="Preview" class="img-thumbnail" style="max-width:250px;max: height 250px;" />
       <span *ngIf="!imageUrl" class="text-muted">No image</span>
     </div>
-  </div>
+</div>
+
   <div class="mb-3">
     <label class="form-label">Songs in this Album:</label>
     <div class="input-group mb-2">
       <input type="text" [(ngModel)]="newSong" name="newSong" placeholder="Song Name" class="form-control" />
       <button type="button" (click)="addSong()" [disabled]="!newSong.trim()" class="btn btn-primary">Add Song</button>
     </div>
+
     <ul class="list-group">
-      <li *ngFor="let song of album.songs; let i = index" 
-          class="list-group-item d-flex justify-content-between align-items-center py-2"
-          [ngClass]="{'text-decoration-line-through text-danger': song.isDelete}">
-        <span>
-          {{ song.name }}
-          <span *ngIf="song.isDelete" class="badge bg-danger ms-2">Deleted</span>
-        </span>
-        <button 
-          type="button" 
-          (click)="removeSong(i)" 
-          class="btn btn-sm btn-danger" 
-          title="Remove"
-          [disabled]="song.isDelete">
-          &times;
-        </button>
-      </li>
-    </ul>
+  <li *ngFor="let song of album.songs; let i = index" 
+      class="list-group-item d-flex justify-content-between align-items-center py-2"
+      [ngClass]="{'text-decoration-line-through text-danger': song.isDelete}">
+    
+    <div class="flex-grow-1 me-3">
+      <input 
+        [(ngModel)]="album.songs[i].name" 
+        name="songName{{i}}" 
+        class="form-control form-control-sm"
+        [readonly]="song.isDelete"
+        [ngClass]="{'bg-light text-decoration-line-through text-danger': song.isDelete}"
+      />
+    </div>
+
+    <div>
+      <span *ngIf="song.isDelete" class="badge bg-danger me-2">Deleted</span>
+      <button 
+        type="button" 
+        (click)="removeSong(i)" 
+        class="btn btn-sm btn-danger" 
+        title="Remove"
+        [disabled]="song.isDelete">
+        &times;
+      </button>
+    </div>
+  </li>
+</ul>
     <div *ngIf="album.songs.length === 0" class="text-muted mt-2">No songs in this album.</div>
   </div>
 
   <button type="submit" [disabled]="albumForm.invalid" class="btn btn-warning w-100 mt-3">
     Save Changes
   </button>
+
+  
+<div class="mt-4">
+  <button class="btn btn-outline-secondary mb-2" type="button" (click)="showJson = !showJson">
+    <span [innerHTML]="showJson ? '&#9650;' : '&#9660;'"></span>
+    {{ showJson ? 'Hide JSON Data' : 'Show JSON Data' }}
+  </button>
+
+  <div *ngIf="showJson">
+    <h5>JSON Data</h5>
+    <pre class="bg-light p-2 border rounded" style="font-size: 0.95em;">
+{{ album | json }}
+    </pre>
+  </div>
+</div>
+
 </form>
 <div *ngIf="loading" class="text-center my-5">
   <div class="spinner-border text-warning"></div>
-</div>
-
-<div class="mt-4">
-  <h5>JSON Data</h5>
-  <pre class="bg-light p-2 border rounded" style="font-size: 0.95em;">
-{{ album | json }}
-  </pre>
 </div>
